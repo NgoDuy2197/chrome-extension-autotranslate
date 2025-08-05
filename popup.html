@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 320px;
+      padding: 16px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      margin: 0;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    .config-section {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .config-section h3 {
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .language-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    
+    .language-input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+    }
+    
+    .hint {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-top: 8px;
+    }
+    
+    .save-btn {
+      width: 100%;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .save-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+    
+    .save-btn:active {
+      transform: translateY(0);
+    }
+    
+    .status {
+      margin-top: 12px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .status.success {
+      background: rgba(76, 175, 80, 0.3);
+      opacity: 1;
+    }
+    
+    .status.error {
+      background: rgba(244, 67, 54, 0.3);
+      opacity: 1;
+    }
+    
+    .preview {
+      margin-top: 16px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      font-size: 12px;
+    }
+    
+    .preview h4 {
+      margin: 0 0 8px 0;
+      font-size: 13px;
+    }
+    
+    .preview-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    
+    .preview-emoji {
+      margin-right: 8px;
+      font-size: 14px;
+    }
+    
+    .preview-lang {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🌍 Cấu hình dịch thuật</h1>
+  </div>
+  
+  <div class="config-section">
+    <h3>📝 Danh sách ngôn ngữ</h3>
+    <input 
+      type="text" 
+      id="languages" 
+      class="language-input" 
+      placeholder="vi, en, zh, ja, ko"
+      maxlength="50"
+    >
+    <div class="hint">
+      Nhập mã ngôn ngữ cách nhau bởi dấu phẩy (tối đa 5 ngôn ngữ)
+    </div>
+  </div>
+  
+  <button id="saveBtn" class="save-btn">💾 Lưu cấu hình</button>
+  
+  <div id="status" class="status"></div>
+  
+  <div class="preview">
+    <h4>👀 Xem trước:</h4>
+    <div id="previewContent"></div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html> 

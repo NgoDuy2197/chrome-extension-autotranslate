@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Tạo Icons</title>
+</head>
+<body>
+    <h1>Tạo Icons cho Chrome Extension</h1>
+    <div id="icons"></div>
+    
+    <script>
+        function createIcon(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Tạo gradient background
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            
+            // Vẽ background
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Vẽ circle
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = Math.max(2, size / 32);
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, size/3, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            // Vẽ chữ T
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${size/4}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('T', size/2, size/2);
+            
+            return canvas;
+        }
+        
+        function downloadCanvas(canvas, filename) {
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        const sizes = [16, 32, 48, 128];
+        const container = document.getElementById('icons');
+        
+        sizes.forEach(size => {
+            const canvas = createIcon(size);
+            const div = document.createElement('div');
+            div.style.margin = '10px';
+            div.style.display = 'inline-block';
+            
+            const label = document.createElement('div');
+            label.textContent = `${size}x${size}`;
+            label.style.textAlign = 'center';
+            label.style.marginTop = '5px';
+            
+            const downloadBtn = document.createElement('button');
+            downloadBtn.textContent = 'Tải xuống';
+            downloadBtn.onclick = () => downloadCanvas(canvas, `icon${size}.png`);
+            downloadBtn.style.marginTop = '5px';
+            
+            div.appendChild(canvas);
+            div.appendChild(label);
+            div.appendChild(downloadBtn);
+            container.appendChild(div);
+        });
+    </script>
+</body>
+</html> 

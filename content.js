@@ -2,6 +2,29 @@ let lastMouseX = 0
 let lastMouseY = 0
 let tooltipDiv = null
 
+// Emoji mapping cho các ngôn ngữ
+const languageEmojis = {
+  'vi': '🎋', 'en': '🌍', 'zh': '🀄', 'ja': '🗾', 'ko': '🎎',
+  'fr': '🥖', 'de': '🍺', 'es': '🌮', 'it': '🍕', 'pt': '🏖️',
+  'ru': '🐻', 'ar': '🏺', 'hi': '🕉️', 'th': '🐘', 'id': '🌺',
+  'ms': '🌴', 'tl': '🌋', 'fa': '🌹', 'tr': '☕', 'nl': '🌷',
+  'pl': '🥟', 'sv': '🦊', 'da': '🧀', 'no': '❄️', 'fi': '🫐',
+  'hu': '🌶️', 'cs': '🍺', 'sk': '🏔️', 'ro': '🧄', 'bg': '🌹',
+  'hr': '🏖️', 'sr': '🌲', 'sl': '🏔️', 'et': '🌲', 'lv': '🌊',
+  'lt': '🌲', 'mt': '🌊', 'ga': '☘️', 'cy': '🐉', 'is': '🌋',
+  'mk': '🏔️', 'sq': '🏔️', 'ka': '🍷', 'hy': '🏔️', 'az': '🔥',
+  'kk': '🐎', 'ky': '🏔️', 'uz': '🌾', 'tg': '🏔️', 'mn': '🐎',
+  'my': '🐘', 'km': '🏛️', 'lo': '🐘', 'ne': '🏔️', 'si': '🌺',
+  'ur': '🌙', 'bn': '🌺', 'gu': '🌺', 'pa': '🌺', 'te': '🌺',
+  'kn': '🌺', 'ml': '🌺', 'ta': '🌺', 'he': '🕯️', 'yi': '📚',
+  'am': '☕', 'sw': '🦁', 'zu': '🦁', 'af': '🦁', 'xh': '🦁',
+  'st': '🦁', 'tn': '🦁', 'ss': '🦁', 've': '🦁', 'ts': '🦁',
+  'nr': '🦁', 'lg': '🦁', 'rw': '🦁', 'ak': '🦁', 'yo': '🦁',
+  'ig': '🦁', 'ha': '🦁', 'ff': '🦁', 'wo': '🦁', 'sn': '🦁',
+  'ny': '🦁', 'mg': '🦁', 'so': '🦁', 'om': '🦁', 'ti': '🦁',
+  'aa': '🦁', 'auto': '🔍'
+};
+
 document.addEventListener("mouseup", (e) => {
     const selection = window.getSelection().toString().trim()
 
@@ -17,14 +40,7 @@ document.addEventListener("mouseup", (e) => {
             { action: "translateMulti", text: selection },
             (res) => {
                 if (res) {
-                    showTooltip(
-                        res.detected,
-                        res.vi,
-                        res.zh,
-                        res.en,
-                        lastMouseX,
-                        lastMouseY
-                    )
+                    showTooltip(res, lastMouseX, lastMouseY)
                 }
             }
         )
@@ -37,20 +53,42 @@ document.addEventListener("mouseup", (e) => {
     }
 })
 
-function showTooltip(original, vietnamese, chinese, english, x, y) {
+// Lắng nghe cập nhật ngôn ngữ từ popup
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    if (msg.action === 'updateLanguages') {
+        // Có thể cập nhật UI nếu cần
+        console.log('Languages updated:', msg.languages);
+    }
+});
+
+function showTooltip(results, x, y) {
     if (tooltipDiv) tooltipDiv.remove()
 
     tooltipDiv = document.createElement("div")
     tooltipDiv.className = "my-translate-tooltip"
 
-    let results = [
-        // `<div style="margin-bottom: 10px;">🔍 ${original}</div>`,
-        `<div style="margin-bottom: 10px;">🎋 ${vietnamese}</div>`,
-        `<div style="margin-bottom: 10px;">🀄 ${chinese}</div>`,
-        `<div style="margin-bottom: 10px;">🌍 ${english}</div>`,
+    const values = Object.values(languageEmojis)
+    
+    let resultsHTML = [
+        `<div style="margin-bottom: 10px; font-weight: 500; color: #666;">${values[Math.floor(Math.random() * values.length)]}</div>`,
     ]
+    
+    // Hiển thị ngôn ngữ gốc được phát hiện
+    // if (results.detected) {
+    //     resultsHTML.push(`<div style="margin-bottom: 10px; font-weight: 500; color: #666;">🔍 ${results.detected}</div>`)
+    // }
+    
+    // Hiển thị các bản dịch
+    if (results.languages && results.languages.length > 0) {
+        results.languages.forEach(lang => {
+            if (results[lang]) {
+                const emoji = languageEmojis[lang] || '🌐'
+                resultsHTML.push(`<div style="margin-bottom: 10px;">${emoji} ${results[lang]}</div>`)
+            }
+        })
+    }
 
-    tooltipDiv.innerHTML = results.join("")
+    tooltipDiv.innerHTML = resultsHTML.join("")
 
     tooltipDiv.style.cssText = `
     position: absolute;

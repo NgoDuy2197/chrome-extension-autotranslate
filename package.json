@@ -1,0 +1,29 @@
+{
+  "name": "chrome-extension-autotranslate",
+  "version": "1.0.0",
+  "description": "Chrome extension để dịch văn bản sang nhiều ngôn ngữ với cấu hình tùy chỉnh",
+  "main": "background.js",
+  "scripts": {
+    "create-icons": "node create_icons.js",
+    "build": "echo 'Extension đã sẵn sàng để load vào Chrome'"
+  },
+  "keywords": [
+    "chrome-extension",
+    "translate",
+    "multilingual",
+    "tooltip"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "canvas": "^2.11.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/chrome-extension-autotranslate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/chrome-extension-autotranslate/issues"
+  },
+  "homepage": "https://github.com/yourusername/chrome-extension-autotranslate#readme"
+} 
